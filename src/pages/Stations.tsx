@@ -1,0 +1,169 @@
+
+import { useState } from "react";
+import { MainLayout } from "@/components/layout/MainLayout";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+
+interface Station {
+  id: string;
+  name: string;
+  location: string;
+  platforms: number;
+  status: "active" | "maintenance" | "closed";
+  trainsPerDay: number;
+}
+
+export default function Stations() {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Mock stations data
+  const stations: Station[] = [
+    {
+      id: "nyc",
+      name: "Grand Central Terminal",
+      location: "New York, NY",
+      platforms: 44,
+      status: "active",
+      trainsPerDay: 124,
+    },
+    {
+      id: "chi",
+      name: "Union Station",
+      location: "Chicago, IL",
+      platforms: 24,
+      status: "active",
+      trainsPerDay: 97,
+    },
+    {
+      id: "la",
+      name: "Union Station",
+      location: "Los Angeles, CA",
+      platforms: 12,
+      status: "active",
+      trainsPerDay: 85,
+    },
+    {
+      id: "sf",
+      name: "Salesforce Transit Center",
+      location: "San Francisco, CA",
+      platforms: 10,
+      status: "maintenance",
+      trainsPerDay: 42,
+    },
+    {
+      id: "dc",
+      name: "Union Station",
+      location: "Washington DC",
+      platforms: 20,
+      status: "active",
+      trainsPerDay: 112,
+    },
+    {
+      id: "sea",
+      name: "King Street Station",
+      location: "Seattle, WA",
+      platforms: 8,
+      status: "active",
+      trainsPerDay: 56,
+    },
+    {
+      id: "pd",
+      name: "Portland Union Station",
+      location: "Portland, OR",
+      platforms: 6,
+      status: "closed",
+      trainsPerDay: 0,
+    },
+    {
+      id: "bos",
+      name: "South Station",
+      location: "Boston, MA",
+      platforms: 13,
+      status: "active",
+      trainsPerDay: 78,
+    },
+  ];
+
+  // Filter stations based on search query
+  const filteredStations = stations.filter(
+    (station) =>
+      station.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      station.location.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  return (
+    <MainLayout title="Stations">
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="text-lg">Search Stations</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+            <Input
+              className="pl-10"
+              placeholder="Search by station name or location..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Station Name</TableHead>
+                <TableHead>Location</TableHead>
+                <TableHead>Platforms</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Trains/Day</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredStations.map((station) => (
+                <TableRow key={station.id} className="cursor-pointer hover:bg-muted/50">
+                  <TableCell className="font-medium">{station.name}</TableCell>
+                  <TableCell>{station.location}</TableCell>
+                  <TableCell>{station.platforms}</TableCell>
+                  <TableCell>
+                    <StationStatusBadge status={station.status} />
+                  </TableCell>
+                  <TableCell className="text-right">{station.trainsPerDay}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </MainLayout>
+  );
+}
+
+function StationStatusBadge({ status }: { status: Station["status"] }) {
+  const statusConfig = {
+    active: { text: "Active", className: "bg-green-100 text-green-800 border-green-200" },
+    maintenance: { text: "Maintenance", className: "bg-amber-100 text-amber-800 border-amber-200" },
+    closed: { text: "Closed", className: "bg-red-100 text-red-800 border-red-200" },
+  };
+
+  const config = statusConfig[status];
+
+  return (
+    <Badge variant="outline" className={config.className}>
+      {config.text}
+    </Badge>
+  );
+}

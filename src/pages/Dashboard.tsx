@@ -1,12 +1,24 @@
 
+import { Link } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { TrainStatusCard } from "@/components/dashboard/TrainStatusCard";
-import { Calendar, Map, Route, TrainFront, User, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Calendar, Map, Route, Ticket, TrainFront, User, Users } from "lucide-react";
 
 export default function Dashboard() {
   return (
     <MainLayout title="Dashboard">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-xl font-semibold">System Overview</h1>
+        <Link to="/booking">
+          <Button className="flex items-center gap-2">
+            <Ticket size={16} />
+            Book Tickets
+          </Button>
+        </Link>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <StatCard 
           title="Active Trains" 

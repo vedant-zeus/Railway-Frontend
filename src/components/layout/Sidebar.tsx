@@ -1,9 +1,9 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Calendar, Map, Route, TrainFront, User, Users } from "lucide-react";
+import { Calendar, Map, Route, Ticket, TrainFront, User, Users } from "lucide-react";
 
 type NavItem = {
   name: string;
@@ -21,6 +21,11 @@ const navItems: NavItem[] = [
     name: "Schedules",
     to: "/schedules",
     icon: Calendar,
+  },
+  {
+    name: "Book Tickets",
+    to: "/booking",
+    icon: Ticket,
   },
   {
     name: "Routes",
@@ -46,6 +51,7 @@ const navItems: NavItem[] = [
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const location = useLocation();
   
   return (
     <div
@@ -106,6 +112,7 @@ export function Sidebar() {
                 to={item.to}
                 className={cn(
                   "flex items-center gap-3 px-3 py-2 rounded-md text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors",
+                  location.pathname === item.to && "bg-sidebar-accent text-sidebar-accent-foreground",
                   collapsed && "justify-center"
                 )}
               >

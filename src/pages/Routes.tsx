@@ -8,43 +8,42 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Routes() {
-  // Mocked routes data
+  // Updated routes data with Indian railway routes
   const routes = [
     {
       id: "route-1",
-      name: "East Coast Express",
+      name: "Rajdhani Express",
       stations: [
-        { id: "nyc", name: "New York City", timeFromOrigin: "00:00" },
-        { id: "ph", name: "Philadelphia", timeFromOrigin: "01:30" },
-        { id: "bm", name: "Baltimore", timeFromOrigin: "02:45" },
-        { id: "wdc", name: "Washington DC", timeFromOrigin: "03:30" },
-        { id: "rc", name: "Richmond", timeFromOrigin: "05:15" },
-        { id: "char", name: "Charlotte", timeFromOrigin: "08:00" },
-        { id: "atl", name: "Atlanta", timeFromOrigin: "10:30" },
+        { id: "ndls", name: "New Delhi", timeFromOrigin: "00:00" },
+        { id: "cnb", name: "Kanpur Central", timeFromOrigin: "04:35" },
+        { id: "ald", name: "Prayagraj Junction", timeFromOrigin: "06:45" },
+        { id: "mgs", name: "Mughal Sarai Junction", timeFromOrigin: "08:15" },
+        { id: "gaya", name: "Gaya Junction", timeFromOrigin: "10:30" },
+        { id: "dhanbad", name: "Dhanbad Junction", timeFromOrigin: "12:45" },
+        { id: "hwh", name: "Howrah Junction", timeFromOrigin: "16:10" },
       ]
     },
     {
       id: "route-2",
-      name: "West Coast Line",
+      name: "Shatabdi Express",
       stations: [
-        { id: "sea", name: "Seattle", timeFromOrigin: "00:00" },
-        { id: "por", name: "Portland", timeFromOrigin: "03:25" },
-        { id: "eug", name: "Eugene", timeFromOrigin: "05:10" },
-        { id: "sac", name: "Sacramento", timeFromOrigin: "09:45" },
-        { id: "sf", name: "San Francisco", timeFromOrigin: "11:15" },
-        { id: "sj", name: "San Jose", timeFromOrigin: "12:00" },
-        { id: "la", name: "Los Angeles", timeFromOrigin: "16:30" },
+        { id: "ndls", name: "New Delhi", timeFromOrigin: "00:00" },
+        { id: "meerut", name: "Meerut City", timeFromOrigin: "01:30" },
+        { id: "mzn", name: "Muzaffarnagar", timeFromOrigin: "02:15" },
+        { id: "saharanpur", name: "Saharanpur", timeFromOrigin: "03:25" },
+        { id: "ddn", name: "Dehradun", timeFromOrigin: "05:45" },
       ]
     },
     {
       id: "route-3",
-      name: "Midwest Connector",
+      name: "Duronto Express",
       stations: [
-        { id: "chi", name: "Chicago", timeFromOrigin: "00:00" },
-        { id: "mil", name: "Milwaukee", timeFromOrigin: "01:30" },
-        { id: "mad", name: "Madison", timeFromOrigin: "02:45" },
-        { id: "min", name: "Minneapolis", timeFromOrigin: "05:00" },
-        { id: "dlt", name: "Duluth", timeFromOrigin: "07:15" },
+        { id: "cstm", name: "Mumbai CSMT", timeFromOrigin: "00:00" },
+        { id: "pune", name: "Pune Junction", timeFromOrigin: "03:30" },
+        { id: "solapur", name: "Solapur", timeFromOrigin: "07:15" },
+        { id: "sc", name: "Secunderabad Junction", timeFromOrigin: "13:45" },
+        { id: "bza", name: "Vijayawada Junction", timeFromOrigin: "17:30" },
+        { id: "mas", name: "Chennai Central", timeFromOrigin: "22:15" },
       ]
     }
   ];
@@ -91,7 +90,7 @@ export default function Routes() {
                   <div className="space-y-4">
                     <div>
                       <p className="font-medium">Total Distance</p>
-                      <p>1,245 km</p>
+                      <p>{route.id === "route-1" ? "1,532 km" : route.id === "route-2" ? "284 km" : "1,642 km"}</p>
                     </div>
                     <div>
                       <p className="font-medium">Total Duration</p>
@@ -99,7 +98,7 @@ export default function Routes() {
                     </div>
                     <div>
                       <p className="font-medium">Operating Days</p>
-                      <p>Monday to Friday</p>
+                      <p>{route.id === "route-1" ? "Daily" : route.id === "route-2" ? "Except Sunday" : "Monday, Wednesday, Friday"}</p>
                     </div>
                   </div>
                 </TabsContent>

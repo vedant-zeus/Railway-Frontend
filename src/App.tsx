@@ -11,6 +11,7 @@ import Stations from "./pages/Stations";
 import Booking from "./pages/Booking";
 import BookingPassengers from "./pages/BookingPassengers";
 import BookingConfirmation from "./pages/BookingConfirmation";
+import TicketAvailability from "./pages/TicketAvailability";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/booking" element={<Booking />} />
           <Route path="/booking/passengers" element={<BookingPassengers />} />
           <Route path="/booking/confirmation" element={<BookingConfirmation />} />
+          <Route path="/ticket-availability" element={<TicketAvailability />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -1,10 +1,11 @@
-
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Check, Ticket } from "lucide-react";
+import { Check, Ticket, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { bookTickets, checkTicketAvailability } from "@/services/ticketService";
 
 export function BookingConfirmation() {
   const { toast } = useToast();
@@ -13,6 +14,12 @@ export function BookingConfirmation() {
   const bookingDetails = location.state;
   const [isProcessing, setIsProcessing] = useState(false);
   const [isBooked, setIsBooked] = useState(false);
+  const [ticketAvailability, setTicketAvailability] = useState<{
+    available: boolean;
+    remainingSeats: number;
+    checked: boolean;
+  }>({ available: true, remainingSeats: 0, checked: false });
+  
   const pnrNumber = "PNR" + Math.floor(Math.random() * 9000000 + 1000000);
   
   if (!bookingDetails) {
@@ -25,16 +32,55 @@ export function BookingConfirmation() {
     return null;
   }
   
+  // Check ticket availability if not already checked
+  if (!ticketAvailability.checked) {
+    const numPassengers = bookingDetails.passengers?.length || 0;
+    const result = checkTicketAvailability(
+      bookingDetails.trainNumber, 
+      bookingDetails.date instanceof Date ? bookingDetails.date : new Date(), 
+      bookingDetails.from,
+      bookingDetails.to,
+      numPassengers,
+      bookingDetails.class
+    );
+    
+    setTicketAvailability({
+      ...result,
+      checked: true
+    });
+  }
+  
   const handlePayment = () => {
     setIsProcessing(true);
+    
+    // Check availability again at time of booking (to handle race conditions)
+    const numPassengers = bookingDetails.passengers?.length || 0;
+    const success = bookTickets(
+      bookingDetails.trainNumber, 
+      bookingDetails.date instanceof Date ? bookingDetails.date : new Date(), 
+      bookingDetails.from,
+      bookingDetails.to,
+      numPassengers,
+      bookingDetails.class
+    );
+    
     // Simulate payment processing
     setTimeout(() => {
       setIsProcessing(false);
-      setIsBooked(true);
-      toast({
-        title: "Booking Successful",
-        description: `Your booking (PNR: ${pnrNumber}) has been confirmed!`,
-      });
+      
+      if (success) {
+        setIsBooked(true);
+        toast({
+          title: "Booking Successful",
+          description: `Your booking (PNR: ${pnrNumber}) has been confirmed!`,
+        });
+      } else {
+        toast({
+          title: "Booking Failed",
+          description: "These tickets are no longer available. Please select a different train or travel date.",
+          variant: "destructive",
+        });
+      }
     }, 2000);
   };
   
@@ -46,6 +92,15 @@ export function BookingConfirmation() {
         </CardTitle>
       </CardHeader>
       <CardContent>
+        {!ticketAvailability.available && !isBooked ? (
+          <Alert variant="destructive" className="mb-6">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription>
+              Sorry, these tickets are no longer available. Only {ticketAvailability.remainingSeats} seats left, but you need {bookingDetails.passengers?.length || 0}.
+            </AlertDescription>
+          </Alert>
+        ) : null}
+      
         {isBooked ? (
           <div className="space-y-6">
             <div className="flex items-center justify-center p-6 bg-green-50 rounded-lg">
@@ -183,9 +238,9 @@ export function BookingConfirmation() {
           <Button 
             className="w-full" 
             onClick={handlePayment}
-            disabled={isProcessing}
+            disabled={isProcessing || !ticketAvailability.available}
           >
-            {isProcessing ? "Processing..." : `Pay ₹${bookingDetails.fare.toFixed(2)}`}
+            {isProcessing ? "Processing..." : ticketAvailability.available ? `Pay ₹${bookingDetails.fare.toFixed(2)}` : "Tickets Unavailable"}
           </Button>
         )}
       </CardFooter>

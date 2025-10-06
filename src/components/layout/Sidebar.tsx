@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -12,64 +11,38 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  {
-    name: "Dashboard",
-    to: "/",
-    icon: TrainFront,
-  },
-  {
-    name: "Schedules",
-    to: "/schedules",
-    icon: Calendar,
-  },
-  {
-    name: "Book Tickets",
-    to: "/booking",
-    icon: Ticket,
-  },
-  {
-    name: "Routes",
-    to: "/routes",
-    icon: Route,
-  },
-  {
-    name: "Stations",
-    to: "/stations",
-    icon: Map,
-  },
-  {
-    name: "Passengers",
-    to: "/passengers",
-    icon: Users,
-  },
-  {
-    name: "Staff",
-    to: "/staff",
-    icon: User,
-  },
+  { name: "Dashboard", to: "/", icon: TrainFront },
+  { name: "Schedules", to: "/schedules", icon: Calendar },
+  { name: "Book Tickets", to: "/booking", icon: Ticket },
+  { name: "Routes", to: "/routes", icon: Route },
+  { name: "Stations", to: "/stations", icon: Map },
+  { name: "Passengers", to: "/passengers", icon: Users },
+  { name: "Staff", to: "/staff", icon: User },
 ];
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
-  
+
   return (
     <div
       className={cn(
-        "bg-sidebar h-screen flex flex-col transition-all duration-300",
+        // Gradient background and subtle border for contrast
+        "bg-gradient-to-b from-blue-50 via-indigo-100 to-purple-200 border-r border-indigo-200 h-screen flex flex-col transition-all duration-300 shadow-lg",
         collapsed ? "w-16" : "w-64"
       )}
     >
-      <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
+      {/* Header / Logo Section */}
+      <div className="flex items-center justify-between p-4 border-b border-indigo-200">
         {!collapsed && (
-          <div className="text-sidebar-foreground font-bold text-lg">
+          <div className="text-indigo-800 font-bold text-lg tracking-wide">
             Rail Route
           </div>
         )}
         <Button
           variant="ghost"
           size="icon"
-          className="text-sidebar-foreground"
+          className="text-indigo-700 hover:bg-indigo-200"
           onClick={() => setCollapsed(!collapsed)}
         >
           {collapsed ? (
@@ -104,33 +77,41 @@ export function Sidebar() {
         </Button>
       </div>
 
+      {/* Navigation Links */}
       <nav className="flex-1 p-2">
         <ul className="space-y-1">
-          {navItems.map((item) => (
-            <li key={item.name}>
-              <Link
-                to={item.to}
-                className={cn(
-                  "flex items-center gap-3 px-3 py-2 rounded-md text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors",
-                  location.pathname === item.to && "bg-sidebar-accent text-sidebar-accent-foreground",
-                  collapsed && "justify-center"
-                )}
-              >
-                <item.icon size={20} />
-                {!collapsed && <span>{item.name}</span>}
-              </Link>
-            </li>
-          ))}
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.to;
+            return (
+              <li key={item.name}>
+                <Link
+                  to={item.to}
+                  className={cn(
+                    "flex items-center gap-3 px-3 py-2 rounded-md text-indigo-900 hover:bg-indigo-200/70 hover:text-indigo-800 transition-colors font-medium",
+                    isActive &&
+                      "bg-indigo-300/70 text-indigo-900 font-semibold shadow-sm",
+                    collapsed && "justify-center"
+                  )}
+                >
+                  <item.icon size={20} />
+                  {!collapsed && <span>{item.name}</span>}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
 
-      <div className="p-4 border-t border-sidebar-border">
-        <div className={cn("flex items-center gap-3", collapsed && "justify-center")}>
-          <div className="w-8 h-8 rounded-full bg-sidebar-accent flex items-center justify-center text-sidebar-accent-foreground font-bold">
+      {/* Footer / User Info */}
+      <div className="p-4 border-t border-indigo-200 bg-indigo-50/50">
+        <div
+          className={cn("flex items-center gap-3", collapsed && "justify-center")}
+        >
+          <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold shadow-md">
             A
           </div>
           {!collapsed && (
-            <div className="text-sidebar-foreground">
+            <div className="text-indigo-900">
               <div className="font-medium text-sm">Admin User</div>
             </div>
           )}

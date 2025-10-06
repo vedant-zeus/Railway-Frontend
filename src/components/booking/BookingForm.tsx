@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
@@ -42,21 +41,23 @@ export function BookingForm() {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full bg-gradient-to-r from-blue-50 via-indigo-100 to-purple-200 shadow-lg border-none">
       <CardHeader>
-        <CardTitle className="text-2xl">Book Your Train Ticket</CardTitle>
+        <CardTitle className="text-2xl text-indigo-900 font-bold">
+          Book Your Train Ticket
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label htmlFor="from" className="font-medium text-sm">From</label>
+              <label htmlFor="from" className="font-medium text-sm text-indigo-900">From</label>
               <Select 
                 value={formData.from} 
                 onValueChange={(value) => setFormData({...formData, from: value})}
                 required
               >
-                <SelectTrigger>
+                <SelectTrigger className="bg-white/70 backdrop-blur-sm">
                   <SelectValue placeholder="Select departure station" />
                 </SelectTrigger>
                 <SelectContent>
@@ -70,13 +71,13 @@ export function BookingForm() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="to" className="font-medium text-sm">To</label>
+              <label htmlFor="to" className="font-medium text-sm text-indigo-900">To</label>
               <Select 
                 value={formData.to} 
                 onValueChange={(value) => setFormData({...formData, to: value})}
                 required
               >
-                <SelectTrigger>
+                <SelectTrigger className="bg-white/70 backdrop-blur-sm">
                   <SelectValue placeholder="Select arrival station" />
                 </SelectTrigger>
                 <SelectContent>
@@ -92,17 +93,17 @@ export function BookingForm() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <label className="font-medium text-sm">Travel Date</label>
+              <label className="font-medium text-sm text-indigo-900">Travel Date</label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-full justify-start text-left font-normal",
+                      "w-full justify-start text-left font-normal bg-white/70 backdrop-blur-sm hover:bg-white/90",
                       !formData.date && "text-muted-foreground"
                     )}
                   >
-                    <Calendar className="mr-2 h-4 w-4" />
+                    <Calendar className="mr-2 h-4 w-4 text-indigo-700" />
                     {formData.date ? format(formData.date, "PPP") : <span>Pick a date</span>}
                   </Button>
                 </PopoverTrigger>
@@ -119,12 +120,12 @@ export function BookingForm() {
             </div>
 
             <div className="space-y-2">
-              <label className="font-medium text-sm">Passengers</label>
+              <label className="font-medium text-sm text-indigo-900">Passengers</label>
               <Select 
                 value={formData.passengers} 
                 onValueChange={(value) => setFormData({...formData, passengers: value})}
               >
-                <SelectTrigger>
+                <SelectTrigger className="bg-white/70 backdrop-blur-sm">
                   <SelectValue placeholder="Number of passengers" />
                 </SelectTrigger>
                 <SelectContent>
@@ -138,12 +139,12 @@ export function BookingForm() {
             </div>
 
             <div className="space-y-2">
-              <label className="font-medium text-sm">Class</label>
+              <label className="font-medium text-sm text-indigo-900">Class</label>
               <Select 
                 value={formData.class} 
                 onValueChange={(value) => setFormData({...formData, class: value})}
               >
-                <SelectTrigger>
+                <SelectTrigger className="bg-white/70 backdrop-blur-sm">
                   <SelectValue placeholder="Select class" />
                 </SelectTrigger>
                 <SelectContent>
@@ -157,7 +158,12 @@ export function BookingForm() {
             </div>
           </div>
 
-          <Button type="submit" className="w-full mt-6">Search Trains</Button>
+          <Button
+            type="submit"
+            className="w-full mt-6 bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 text-white font-semibold hover:opacity-90 transition"
+          >
+            Search Trains
+          </Button>
         </form>
       </CardContent>
     </Card>

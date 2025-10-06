@@ -32,7 +32,6 @@ export function BookingConfirmation() {
     return null;
   }
   
-  // Check ticket availability if not already checked
   if (!ticketAvailability.checked) {
     const numPassengers = bookingDetails.passengers?.length || 0;
     const result = checkTicketAvailability(
@@ -52,8 +51,6 @@ export function BookingConfirmation() {
   
   const handlePayment = () => {
     setIsProcessing(true);
-    
-    // Check availability again at time of booking (to handle race conditions)
     const numPassengers = bookingDetails.passengers?.length || 0;
     const success = bookTickets(
       bookingDetails.trainNumber, 
@@ -64,7 +61,6 @@ export function BookingConfirmation() {
       bookingDetails.class
     );
     
-    // Simulate payment processing
     setTimeout(() => {
       setIsProcessing(false);
       
@@ -85,9 +81,9 @@ export function BookingConfirmation() {
   };
   
   return (
-    <Card className="w-full">
+    <Card className="w-full bg-gradient-to-r from-blue-50 via-indigo-100 to-purple-200 shadow-lg border-none">
       <CardHeader>
-        <CardTitle className="text-2xl">
+        <CardTitle className="text-2xl text-indigo-900 font-bold">
           {isBooked ? "Booking Confirmed!" : "Booking Summary"}
         </CardTitle>
       </CardHeader>
@@ -103,30 +99,30 @@ export function BookingConfirmation() {
       
         {isBooked ? (
           <div className="space-y-6">
-            <div className="flex items-center justify-center p-6 bg-green-50 rounded-lg">
+            <div className="flex items-center justify-center p-6 bg-gradient-to-r from-blue-100 via-indigo-200 to-purple-200 rounded-lg">
               <div className="text-center">
-                <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                  <Check className="text-green-600 w-6 h-6" />
+                <div className="mx-auto w-12 h-12 bg-white/80 rounded-full flex items-center justify-center mb-4 shadow-md">
+                  <Check className="text-indigo-700 w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-semibold text-green-800">Ticket Confirmed</h3>
-                <p className="text-green-700 mt-1">Your journey is booked and ready!</p>
+                <h3 className="text-lg font-semibold text-indigo-900">Ticket Confirmed</h3>
+                <p className="text-indigo-800 mt-1">Your journey is booked and ready!</p>
               </div>
             </div>
             
-            <div className="border-2 border-dashed border-gray-200 rounded-lg p-4">
+            <div className="border-2 border-dashed border-indigo-200 rounded-lg p-4 bg-white/70 backdrop-blur-sm">
               <div className="flex items-center mb-4">
-                <Ticket className="mr-2" />
-                <h3 className="font-bold text-lg">PNR: {pnrNumber}</h3>
+                <Ticket className="mr-2 text-indigo-700" />
+                <h3 className="font-bold text-lg text-indigo-900">PNR: {pnrNumber}</h3>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <p className="text-sm text-gray-500">Train</p>
-                  <p className="font-medium">{bookingDetails.trainNumber} - {bookingDetails.trainName}</p>
+                  <p className="text-sm text-indigo-700/70">Train</p>
+                  <p className="font-medium text-indigo-900">{bookingDetails.trainNumber} - {bookingDetails.trainName}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Date</p>
-                  <p className="font-medium">
+                  <p className="text-sm text-indigo-700/70">Date</p>
+                  <p className="font-medium text-indigo-900">
                     {bookingDetails.date instanceof Date ? bookingDetails.date.toLocaleDateString() : 'Invalid date'}
                   </p>
                 </div>
@@ -134,23 +130,25 @@ export function BookingConfirmation() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <p className="text-sm text-gray-500">From</p>
-                  <p className="font-medium">{bookingDetails.from}</p>
-                  <p className="text-sm">{bookingDetails.departureTime}</p>
+                  <p className="text-sm text-indigo-700/70">From</p>
+                  <p className="font-medium text-indigo-900">{bookingDetails.from}</p>
+                  <p className="text-sm text-indigo-800/80">{bookingDetails.departureTime}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">To</p>
-                  <p className="font-medium">{bookingDetails.to}</p>
-                  <p className="text-sm">{bookingDetails.arrivalTime}</p>
+                  <p className="text-sm text-indigo-700/70">To</p>
+                  <p className="font-medium text-indigo-900">{bookingDetails.to}</p>
+                  <p className="text-sm text-indigo-800/80">{bookingDetails.arrivalTime}</p>
                 </div>
               </div>
               
               <div className="mt-4">
-                <h4 className="font-semibold mb-2">Passenger Details</h4>
+                <h4 className="font-semibold mb-2 text-indigo-900">Passenger Details</h4>
                 <div className="space-y-2">
                   {bookingDetails.passengers.map((passenger: any, i: number) => (
-                    <div key={i} className="border-b pb-2 last:border-0">
-                      <p className="font-medium">{passenger.name} ({passenger.gender === 'male' ? 'M' : passenger.gender === 'female' ? 'F' : 'O'}, {passenger.age})</p>
+                    <div key={i} className="border-b border-indigo-200 pb-2 last:border-0">
+                      <p className="font-medium text-indigo-800">
+                        {passenger.name} ({passenger.gender === 'male' ? 'M' : passenger.gender === 'female' ? 'F' : 'O'}, {passenger.age})
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -159,15 +157,15 @@ export function BookingConfirmation() {
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="space-y-4">
+            <div className="space-y-4 bg-white/70 backdrop-blur-sm p-4 rounded-xl">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-gray-500">Train</p>
-                  <p className="font-semibold">{bookingDetails.trainNumber} - {bookingDetails.trainName}</p>
+                  <p className="text-sm text-indigo-700/70">Train</p>
+                  <p className="font-semibold text-indigo-900">{bookingDetails.trainNumber} - {bookingDetails.trainName}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Date</p>
-                  <p className="font-semibold">
+                  <p className="text-sm text-indigo-700/70">Date</p>
+                  <p className="font-semibold text-indigo-900">
                     {bookingDetails.date instanceof Date ? bookingDetails.date.toLocaleDateString() : 'Invalid date'}
                   </p>
                 </div>
@@ -175,20 +173,20 @@ export function BookingConfirmation() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-gray-500">From</p>
-                  <p className="font-semibold">{bookingDetails.from}</p>
-                  <p className="text-sm">{bookingDetails.departureTime}</p>
+                  <p className="text-sm text-indigo-700/70">From</p>
+                  <p className="font-semibold text-indigo-900">{bookingDetails.from}</p>
+                  <p className="text-sm text-indigo-800/80">{bookingDetails.departureTime}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">To</p>
-                  <p className="font-semibold">{bookingDetails.to}</p>
-                  <p className="text-sm">{bookingDetails.arrivalTime}</p>
+                  <p className="text-sm text-indigo-700/70">To</p>
+                  <p className="font-semibold text-indigo-900">{bookingDetails.to}</p>
+                  <p className="text-sm text-indigo-800/80">{bookingDetails.arrivalTime}</p>
                 </div>
               </div>
               
               <div>
-                <p className="text-sm text-gray-500">Class</p>
-                <p className="font-semibold">
+                <p className="text-sm text-indigo-700/70">Class</p>
+                <p className="font-semibold text-indigo-900">
                   {bookingDetails.class === 'ac1' ? 'AC 1st Class' :
                    bookingDetails.class === 'ac2' ? 'AC 2-Tier' :
                    bookingDetails.class === 'ac3' ? 'AC 3-Tier' :
@@ -198,29 +196,31 @@ export function BookingConfirmation() {
             </div>
             
             <div>
-              <h4 className="font-semibold text-lg mb-2">Passenger Details</h4>
-              <div className="space-y-3">
+              <h4 className="font-semibold text-lg mb-2 text-indigo-900">Passenger Details</h4>
+              <div className="space-y-3 bg-white/70 backdrop-blur-sm p-4 rounded-xl">
                 {bookingDetails.passengers.map((passenger: any, i: number) => (
-                  <div key={i} className="flex justify-between border-b pb-2 last:border-0">
-                    <p>{passenger.name}</p>
-                    <p>{passenger.gender === 'male' ? 'Male' : passenger.gender === 'female' ? 'Female' : 'Other'}, {passenger.age}</p>
+                  <div key={i} className="flex justify-between border-b border-indigo-200 pb-2 last:border-0">
+                    <p className="text-indigo-900">{passenger.name}</p>
+                    <p className="text-indigo-800/80">
+                      {passenger.gender === 'male' ? 'Male' : passenger.gender === 'female' ? 'Female' : 'Other'}, {passenger.age}
+                    </p>
                   </div>
                 ))}
               </div>
             </div>
             
             <div>
-              <h4 className="font-semibold text-lg mb-2">Payment Details</h4>
-              <div className="space-y-2">
-                <div className="flex justify-between">
+              <h4 className="font-semibold text-lg mb-2 text-indigo-900">Payment Details</h4>
+              <div className="space-y-2 bg-white/70 backdrop-blur-sm p-4 rounded-xl">
+                <div className="flex justify-between text-indigo-900">
                   <p>Base fare</p>
                   <p>₹{(bookingDetails.fare * 0.9).toFixed(2)}</p>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between text-indigo-900">
                   <p>GST (10%)</p>
                   <p>₹{(bookingDetails.fare * 0.1).toFixed(2)}</p>
                 </div>
-                <div className="flex justify-between font-bold text-lg border-t pt-2">
+                <div className="flex justify-between font-bold text-lg border-t border-indigo-200 pt-2 text-indigo-900">
                   <p>Total Amount</p>
                   <p>₹{bookingDetails.fare.toFixed(2)}</p>
                 </div>
@@ -232,11 +232,16 @@ export function BookingConfirmation() {
       <CardFooter>
         {isBooked ? (
           <div className="w-full flex flex-col space-y-2">
-            <Button onClick={() => navigate("/")}>Return to Dashboard</Button>
+            <Button
+              onClick={() => navigate("/")}
+              className="bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 text-white font-semibold hover:opacity-90 transition"
+            >
+              Return to Dashboard
+            </Button>
           </div>
         ) : (
           <Button 
-            className="w-full" 
+            className="w-full bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 text-white font-semibold hover:opacity-90 transition" 
             onClick={handlePayment}
             disabled={isProcessing || !ticketAvailability.available}
           >
